@@ -1,0 +1,74 @@
+■音楽素材分離ライブラリ　Spleeter 導入手順
+想像をはるかに超えるレベルで曲の「声」と「伴奏」に分けれる。
+オプションで
+2stems : vocals / other
+4stems : vocals / drums / bass / other
+5stems : vocals / drums / bass / piano /other
+に分けれる
+
+
+1 Python環境ディストリビューション「Miniconda」インストール
+https://docs.conda.io/en/latest/miniconda.html
+全部デフォルトでぽちぽちでOK
+
+
+2 Spleeterをサイトからコピー
+gitを使ってるならcloneで好きなディレクトリにコピーでもOK
+シンプルに「Download zip」で適当なディレクトリに展開するだけでもＯＫ
+
+3 minicondaのpythonバージョンを3.7にする
+minicondaは適当にダウンロード・インストールするとデフォルトではPythonのバージョンが
+Spleeterに適したバージョンにならない
+ので、
+conda install python=3.7
+やる。このバージョンはそのうち変わるかもしれないのでそのときに応じて
+
+
+4 spleeter-masterのなかに「conda」フォルダ作って「spleeter-cpu.yaml」つくる
+上の2 で持ってきたフォルダのなかに
+C:\Users\Catty\spleeter-master\spleeter\conda\spleeter-cpu.yamlってかんじ
+中身は以下をインデント含めて全部はりつけ
+
+
+name: spleeter-cpu
+
+channels:
+  - conda-forge
+  - anaconda
+
+dependencies:
+  - python=3.7
+  - tensorflow=1.14.0
+  - ffmpeg
+  - pandas==0.25.1
+  - requests
+  - pip
+  - pip:
+    - museval==0.3.0
+    - musdb==0.3.1
+    - norbert==0.2.1
+    - spleeter
+
+
+5 スタート押したら入ってる「Anaconda prompt(miniconda3)」に以下コマンドうつ
+①conda install -c conda-forge spleeter
+②conda env create -f spleeter/conda/spleeter-cpu.yaml
+
+ここの②コマンド、相対パスでyamlファイルの場所指定してるので、必要に応じてカレントうつすとかフルパスにかえるとか必要
+
+
+6 おわり
+
+あとはanacomda prompt(miniconda3)を実行して以下コマンドでOK
+
+↓必ずうつ。　起動した瞬間に。 spleeter-cpu環境をactivateする手順もやってみたらできたので別記
+conda activate spleeter-cpu
+
+
+↓ 曲わけるとき
+spleeter separate -i C:\test.mp3 -p spleeter:2stems -o C:\test\
+あとは上記のパスを適当にかえてやるだけ
+
+
+
+
